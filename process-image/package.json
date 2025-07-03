@@ -1,0 +1,29 @@
+{
+  "name": "cloud-atlas-process-image",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "zip": "tsc && cp dist/index.js . && npx bestzip process-image.zip index.js node_modules && rm -rf index.js",
+    "upload-s3": "aws s3 cp process-image.zip s3://cloud-atlas-lambdas/",
+    "local": "tsx --env-file=.env runner.ts",
+    "send-to-aws": "npm run zip && npm run upload-s3",
+    "tsc": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.147",
+    "@types/node": "^22.10.7",
+    "@types/sharp": "^0.31.1",
+    "tslib": "^2.8.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.705.0",
+    "sharp": "^0.33.5"
+  }
+}
