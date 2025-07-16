@@ -1,0 +1,1 @@
+`$ npm install --cpu=x64 --os=linux sharp`

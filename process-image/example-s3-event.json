@@ -1,0 +1,38 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.1",
+            "eventSource": "aws:s3",
+            "awsRegion": "us-east-1",
+            "eventTime": "2025-07-11T07:19:44.954Z",
+            "eventName": "ObjectCreated:Put",
+            "userIdentity": {
+                "principalId": "AWS:AROA47CRVCORWBKQ3QTQ3:cloud-atlas-demo"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "82.19.39.23"
+            },
+            "responseElements": {
+                "x-amz-request-id": "2YP2GEQCHN2NNRTE",
+                "x-amz-id-2": "lylw6uzcVN9eF7D1OVdC1gpNCY9Xg6+jfP6VxWEni1xvAu+5T4S+FieH7CjeH1kXGLUEifdidqWSyBcedsmerhVfD/Mt8fho"
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "tf-s3-lambda-20250709081527654800000004",
+                "bucket": {
+                    "name": "cloud-atlas-demo-dump",
+                    "ownerIdentity": {
+                        "principalId": "A607X4P163S71"
+                    },
+                    "arn": "arn:aws:s3:::cloud-atlas-demo-dump"
+                },
+                "object": {
+                    "key": "017895e8-dbc1-4f03-9c9c-12e1671c807c.jpg",
+                    "size": 157257,
+                    "eTag": "bb60ebda3fbcc2d11accd439aa24903e",
+                    "sequencer": "006870BB10DCB58489"
+                }
+            }
+        }
+    ]
+}
