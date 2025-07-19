@@ -5,6 +5,11 @@ import {
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
 import sharp from "sharp";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { UpdateCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+
+const client = new DynamoDBClient({});
+const ddb = DynamoDBDocumentClient.from(client);
 
 const DESKTOP_MAX_WIDTH = 1500;
 const DESKTOP_PANORAMA_MAX_WIDTH = 2500;
@@ -25,6 +30,9 @@ export const handler = async (event) => {
   console.log("Starting image processing with event...", JSON.stringify(event));
 
   const key = event.Records[0].s3.object.key;
+  const atlasId = key.split("/")[0];
+  const markerId = key.split("/")[1];
+  const photoIdWithExtension = key.split("/")[2];
 
   const getObjectResponse = await s3Client.send(
     new GetObjectCommand({
@@ -107,8 +115,31 @@ export const handler = async (event) => {
 
   try {
     await s3Client.send(deleteObjectCommand);
-  } catch (e) {
-    console.log(`Failed to delete ${key} from dump bucket. Error: ${JSON.stringify(e)}`)
+  } catch (error) {
+    console.log(`Failed to delete ${key} from dump bucket. Error: ${JSON.stringify(error)}`)
+  }
+
+  const newPhoto = {
+    id: photoIdWithExtension,
+    legend: ""
+  };
+
+  try {
+    const command = new UpdateCommand({
+      TableName: "cloud-atlas-demo-photos",
+      Key: { atlasId, markerId },
+      UpdateExpression: "SET photos = list_append(if_not_exists(photos, :empty), :newPhoto)",
+      ExpressionAttributeValues: {
+        ":newPhoto": [newPhoto],
+        ":empty": []
+      },
+      ReturnValues: "UPDATED_NEW"
+    });
+  
+    const result = await ddb.send(command);
+    
+  } catch (error) {
+    console.log(`Failed to add new photo to DDB. Key:  ${key}. Error: ${JSON.stringify(error)}`)
   }
 
   return {
